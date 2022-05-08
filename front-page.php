@@ -6,7 +6,7 @@
         <h1 class="headline headline--large">Welcome!</h1>
         <h2 class="headline headline--medium">We think you&rsquo;ll like it here.</h2>
         <h3 class="headline headline--small">Why don&rsquo;t you check out the <strong>major</strong> you&rsquo;re interested in?</h3>
-        <a href="#" class="btn btn--large btn--blue">Find Your Major</a>
+        <a href="<?= get_post_type_archive_link('program') ?>" class="btn btn--large btn--blue">Find Your Major</a>
     </div>
 </div>
 
@@ -15,17 +15,32 @@
         <div class="full-width-split__inner">
             <h2 class="headline headline--small-plus t-center">Upcoming Events</h2>
             <?php
+            $today = date('Ymd');
             $wp_query = new WP_Query([
                 'post_type' => 'event',
                 'posts_per_page' => 2,
+                'meta_key' => 'event_date',
+                'orderby' => 'meta_value_num',
+                'order' => 'ASC',
+                'meta_query' => [
+                    [
+                        'key' => 'event_date',
+                        'compare' => '>=',
+                        'value' => $today,
+                        'type' => 'numeric'
+                    ]
+                ]
             ]);
 
             while ($wp_query->have_posts()) {
                 $wp_query->the_post(); ?>
                 <div class="event-summary">
                     <a class="event-summary__date t-center" href="<?= the_permalink() ?>">
-                        <span class="event-summary__month"><?php the_time('M') ?></span>
-                        <span class="event-summary__day"><?php the_time('d') ?></span>
+                        <span class="event-summary__month"><?php
+                                                            $eventDate = new DateTime(get_field('event_date'));
+                                                            echo $eventDate->format('M');
+                                                            ?></span>
+                        <span class="event-summary__day"><?php echo $eventDate->format('d'); ?></span>
                     </a>
                     <div class="event-summary__content">
                         <h5 class="event-summary__title headline headline--tiny"><a href="<?= the_permalink() ?>"><?= the_title(); ?></a></h5>
