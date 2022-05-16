@@ -115,3 +115,46 @@ function universityMapKey(array $api)
     return $api;
 }
 add_filter('acf/fields/google_map/api', 'universityMapKey');
+
+// Redirect subscriber out of admin onto homepage
+function redirectSubsToFrontend()
+{
+    $ourCurrentUser = wp_get_current_user();
+    if (count($ourCurrentUser->roles) == 1 and $ourCurrentUser->roles[0] == 'subscriber') {
+        wp_redirect(site_url('/'));
+        exit;
+    }
+}
+add_action('admin_init', 'redirectSubsToFrontend');
+
+function noSubsAdminBar()
+{
+    $ourCurrentUser = wp_get_current_user();
+    if (count($ourCurrentUser->roles) == 1 and $ourCurrentUser->roles[0] == 'subscriber') {
+        show_admin_bar(false);
+    }
+}
+add_action('wp_loaded', 'noSubsAdminBar');
+
+// Customize Login screen
+function ourHeaderUrl()
+{
+    return esc_url(site_url('/'));
+}
+add_filter('login_headerurl', 'ourHeaderUrl');
+
+function ourLoginTitle()
+{
+    return get_bloginfo('name');
+}
+add_filter('login_headertitle', 'ourLoginTitle');
+
+// Load css to login page
+function ourLoginCSS()
+{
+    wp_enqueue_style('build-index-css', get_theme_file_uri('build/style-index.css'));
+    wp_enqueue_style('build-css', get_theme_file_uri('build/index.css'));
+    wp_enqueue_style('custom-google-fonts', '//fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i|Roboto:100,300,400,400i,700,700i');
+    wp_enqueue_style('fontawesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+}
+add_action('login_enqueue_scripts', 'ourLoginCSS');
