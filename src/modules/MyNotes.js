@@ -12,6 +12,7 @@ class MyNotes {
   events() {
     this.myNotes.addEventListener("click", e => this.clickHandler(e))
     document.querySelector(".submit-note").addEventListener("click", () => this.createNote())
+    // 
   }
 
   clickHandler(e) {
