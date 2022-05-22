@@ -86,6 +86,29 @@
 <div class="hero-slider">
     <div data-glide-el="track" class="glide__track">
         <div class="glide__slides">
+            <?php
+            $slideShow = new WP_Query([
+                'post_type' => 'slideshow',
+                'posts_per_page' => -1,
+
+            ]);
+
+            while ($slideShow->have_posts()) {
+                $slideShow->the_post();
+            ?>
+                <div class="hero-slider__slide" style="background-image: url(<?php echo get_field('slide_image')['sizes']['slideShow'] ?>)">
+                    <div class="hero-slider__interior container">
+                        <div class="hero-slider__overlay">
+                            <h2 class="headline headline--medium t-center"><?php echo esc_attr(get_field('slide_title')) ?></h2>
+                            <p class="t-center"><?php echo esc_html(get_field('slide_subtitle')) ?></p>
+                            <p class="t-center no-margin"><a href="<?php echo esc_html(get_field('slide_link_test')) ?>" class="btn btn--blue"><?php echo esc_html(get_field('slide_link_value')) ?></a></p>
+                        </div>
+                    </div>
+                </div>
+
+            <?php
+            }
+            ?>
             <div class="hero-slider__slide" style="background-image: url(<?php echo get_theme_file_uri('images/bus.jpg') ?>)">
                 <div class="hero-slider__interior container">
                     <div class="hero-slider__overlay">

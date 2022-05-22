@@ -50,7 +50,7 @@ while (have_posts()) {
                         <i class="fa fa-heart" aria-hidden="true"></i>
                         <span class="like-count"><?= $likeCount->found_posts; ?></span>
                     </span>
-                    <?php the_content();  ?>
+                    <?php the_content()  ?>
                 </div>
             </div>
         </div>

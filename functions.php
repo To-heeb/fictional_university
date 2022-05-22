@@ -84,6 +84,7 @@ function university_features()
     add_image_size('prefessorLandscape', 400, 260, true);
     add_image_size('prefessorPotrait', 480, 650, true);
     add_image_size('pageBanner', 1500, 350, true);
+    add_image_size('slideShow', 1200, 800, true);
 }
 add_action('after_setup_theme', 'university_features');
 
@@ -185,3 +186,12 @@ function makeNotePrivate($data, $postarr)
     return $data;
 }
 add_filter('wp_insert_post_data', 'makeNotePrivate', 10, 2);
+
+// Ignore bundleing of node module
+function ignoreCertainFiles()
+{
+    $exclude_filters[] = 'themes/fictional-university-theme/node_modules';
+
+    return $exclude_filters;
+}
+add_filter('ai1wm_exclude_content_from_export', 'ignoreCertainFiles');
